@@ -21,6 +21,9 @@ class User extends Authenticatable
         'name',
         'email',
         'password',
+        'profile_img_url',
+        'whatsapp_url',
+        'facebook_url'
     ];
 
     /**
@@ -41,4 +44,9 @@ class User extends Authenticatable
     protected $casts = [
         'email_verified_at' => 'datetime',
     ];
+    public function products()
+    {
+        return $this->hasMany(Product::class);
+    }
+
 }
