@@ -21,7 +21,6 @@ class ProductController extends Controller
         ]);
 
         $products = Product::latest();
-        $items = Product::all();
 
         if ($request->filled('q')) {
             $products->where('name', 'like', "%$request->q%");
@@ -34,10 +33,10 @@ class ProductController extends Controller
             $products->whereIn('category_id', $request->category);
         }
 
-        $products = $products->paginate(9);
+        $products = $products->paginate(8);
         $categories = Category::all();
 
-        return view('products.index', ['products' => $products,'categories' => $categories, 'items' => $items]);
+        return view('products.index', ['products' => $products,'categories' => $categories]);
     }
 
     /**
@@ -61,13 +60,11 @@ class ProductController extends Controller
     {
         $validation = $request->validate([
             'name'    => 'required',
-            'name.*'    => 'required',
             'price'   => 'required|numeric',
             'quantity'   => 'required|numeric',
             'exp_date'    => 'required|date',
             'featured_image'    => 'required|file|image',
             'description'   => 'required',
-            'description.*'   => 'required',
             'category_id'    => 'required|numeric|exists:category,id',
         ]);
 
@@ -112,24 +109,18 @@ class ProductController extends Controller
     {
         $validation = $request->validate([
             'name'    => 'required',
-            'name.*'    => 'required',
             'price'   => 'required|numeric',
             'quantity'   => 'required|numeric',
             'featured_image'    => 'required|file|image',
             'description'   => 'required',
-            'description.*'   => 'required',
             'category_id'    => 'required|numeric|exists:category,id',
         ]);
 
-        foreach ($validation['name'] as $lang => $name) {
-            $product->setTranslation('name', $lang, $name);
-        }
-        foreach ($validation['description'] as $lang => $description) {
-            $product->setTranslation('description', $lang, $description);
-        }
+        $product->name = $validation->name;
         $product->price = $validation->price;
         $product->quantity = $validation->quantity;
         $product->featured_image = $request->featured_image->store('public/images');
+        $product->description = $validation->description;
         $product->category_id = $validation->category_id;
 
         $product->save();

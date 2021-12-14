@@ -37,8 +37,7 @@ class CategoryController extends Controller
     public function store(Request $request)
     {
         $validation = $request->validate([
-            'name'    => 'required',
-            'name.*'    => 'required|min:2',
+            'name'    => 'required|min:2',
         ]);
 
         $category = Category::create($validation);
@@ -78,14 +77,10 @@ class CategoryController extends Controller
     public function update(Request $request, Category $category)
     {
         $validation = $request->validate([
-            'name'    => 'required',
-            'name.*'    => 'required|min:2',
+            'name'    => 'required|min:2',
         ]);
 
-        foreach ($validation['name'] as $lang => $name) {
-            $category->setTranslation('name', $lang, $name);
-        }
-
+        $category->name = $validation->name;
         $category->save();
         return redirect()->route('categories.index');
     }
