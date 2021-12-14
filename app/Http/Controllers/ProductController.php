@@ -116,12 +116,12 @@ class ProductController extends Controller
             'category_id'    => 'required|numeric|exists:category,id',
         ]);
 
-        $product->name = $validation->name;
-        $product->price = $validation->price;
-        $product->quantity = $validation->quantity;
+        $product->name = $validation['name'];
+        $product->price = $validation['price'];
+        $product->quantity = $validation['quantity'];
         $product->featured_image = $request->featured_image->store('public/images');
-        $product->description = $validation->description;
-        $product->category_id = $validation->category_id;
+        $product->description = $validation['description'];
+        $product->category_id = $validation['category_id'];
 
         $product->save();
         return redirect()->route('products.index');

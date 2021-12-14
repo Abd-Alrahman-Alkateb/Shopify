@@ -80,7 +80,7 @@ class CategoryController extends Controller
             'name'    => 'required|min:2',
         ]);
 
-        $category->name = $validation->name;
+        $category->name = $validation['name'];
         $category->save();
         return redirect()->route('categories.index');
     }
