@@ -28,13 +28,12 @@ class CategoryController extends Controller
      */
     public function store(Request $request)
     {
-        // $validation = $request->validate([
-        //     'name'    => 'required|min:2',
-        // ]);
+        $validation = $request->validate([
+            'name'    => 'required|min:2',
+        ]);
 
-        // $category = Category::create($validation);
-        // $categories = Category::all();
-        // return CategoryResource::collection(['categories' => $categories]);
+        $category = Category::create($validation);
+        return response(['message' => 'category was created']);
     }
 
     /**
