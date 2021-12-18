@@ -1,7 +1,10 @@
 <?php
 
-namespace App\Http\Controllers;
+namespace App\Http\Controllers\api;
 
+use App\Http\Controllers\Controller;
+use App\Http\Resources\CategoryResource;
+use App\Http\Resources\ProductResource;
 use App\Models\Category;
 use App\Models\Product;
 use Illuminate\Http\Request;
@@ -35,19 +38,7 @@ class ProductController extends Controller
 
         $products = $products->paginate(8);
         $categories = Category::all();
-
-        return view('products.index', ['products' => $products,'categories' => $categories]);
-    }
-
-    /**
-     * Show the form for creating a new resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
-    public function create()
-    {
-        $categories = Category::all();
-        return view('products.create',['categories' => $categories]);
+        return ProductResource::collection(['products' => $products,'categories' => $categories]);
     }
 
     /**
@@ -70,9 +61,8 @@ class ProductController extends Controller
 
         $validation['featured_image'] = $request->featured_image->store('public/images');
         $product = Product::create($validation);
-        return redirect()->route('products.index');
-
-
+        $products = Product::latest();
+        return ProductResource::collection(['products' => $products]);
     }
 
     /**
@@ -83,19 +73,7 @@ class ProductController extends Controller
      */
     public function show(Product $product)
     {
-        return view('products.show', ['product' => $product]);
-    }
-
-    /**
-     * Show the form for editing the specified resource.
-     *
-     * @param  \App\Models\Product  $product
-     * @return \Illuminate\Http\Response
-     */
-    public function edit(Product $product)
-    {
-        $categories = Category::all();
-        return view('products.edit', ['product' => $product,'categories' => $categories]);
+        return new ProductResource(['product' => $product]);
     }
 
     /**
@@ -124,7 +102,8 @@ class ProductController extends Controller
         $product->category_id = $validation['category_id'];
 
         $product->save();
-        return redirect()->route('products.index');
+        $products = Product::latest();
+        return ProductResource::collection(['products' => $products]);
     }
 
     /**

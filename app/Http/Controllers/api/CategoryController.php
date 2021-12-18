@@ -1,7 +1,9 @@
 <?php
 
-namespace App\Http\Controllers;
+namespace App\Http\Controllers\api;
 
+use App\Http\Controllers\Controller;
+use App\Http\Resources\CategoryResource;
 use App\Models\Category;
 use Illuminate\Http\Request;
 
@@ -15,17 +17,7 @@ class CategoryController extends Controller
     public function index()
     {
         $categories = Category::all();
-        return view('categories.index', ['categories' => $categories]);
-    }
-
-    /**
-     * Show the form for creating a new resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
-    public function create()
-    {
-        return view('categories.create');
+        return CategoryResource::collection(['categories' => $categories]);
     }
 
     /**
@@ -36,13 +28,13 @@ class CategoryController extends Controller
      */
     public function store(Request $request)
     {
-        $validation = $request->validate([
-            'name'    => 'required|min:2',
-        ]);
+        // $validation = $request->validate([
+        //     'name'    => 'required|min:2',
+        // ]);
 
-        $category = Category::create($validation);
-
-        return redirect()->route('categories.index');
+        // $category = Category::create($validation);
+        // $categories = Category::all();
+        // return CategoryResource::collection(['categories' => $categories]);
     }
 
     /**
@@ -53,18 +45,7 @@ class CategoryController extends Controller
      */
     public function show(Category $category)
     {
-        return view('categories.show', ['category' => $category]);
-    }
-
-    /**
-     * Show the form for editing the specified resource.
-     *
-     * @param  \App\Models\Category  $category
-     * @return \Illuminate\Http\Response
-     */
-    public function edit(Category $category)
-    {
-        return view('categories.edit', ['category' => $category]);
+        return new CategoryResource(['category' => $category]);
     }
 
     /**
@@ -76,13 +57,7 @@ class CategoryController extends Controller
      */
     public function update(Request $request, Category $category)
     {
-        $validation = $request->validate([
-            'name'    => 'required|min:2',
-        ]);
-
-        $category->name = $validation['name'];
-        $category->save();
-        return redirect()->route('categories.index');
+        //
     }
 
     /**

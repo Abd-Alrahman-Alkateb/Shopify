@@ -8,8 +8,7 @@ use Spatie\Translatable\HasTranslations;
 
 class Category extends Model
 {
-    use HasFactory, HasTranslations;
-    public $translatable =['name'];
+    use HasFactory;
     protected $fillable =['name'];
 
     public function products()
