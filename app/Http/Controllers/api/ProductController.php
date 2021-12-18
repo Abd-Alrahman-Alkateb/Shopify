@@ -8,6 +8,7 @@ use App\Http\Resources\ProductResource;
 use App\Models\Category;
 use App\Models\Product;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 
 class ProductController extends Controller
 {
@@ -60,9 +61,9 @@ class ProductController extends Controller
         ]);
 
         $validation['featured_image'] = $request->featured_image->store('public/images');
+        $validation['user_id'] = Auth::id();
         $product = Product::create($validation);
-        $products = Product::latest();
-        return ProductResource::collection(['products' => $products]);
+        return response(['message' => 'product was created']);
     }
 
     /**
@@ -85,6 +86,7 @@ class ProductController extends Controller
      */
     public function update(Request $request, Product $product)
     {
+        if ($product->user_id == Auth::id()) {
         $validation = $request->validate([
             'name'    => 'required',
             'price'   => 'required|numeric',
@@ -102,9 +104,9 @@ class ProductController extends Controller
         $product->category_id = $validation['category_id'];
 
         $product->save();
-        $products = Product::latest();
-        return ProductResource::collection(['products' => $products]);
+        return response(['message' => 'product was edited']);
     }
+}
 
     /**
      * Remove the specified resource from storage.
@@ -114,6 +116,9 @@ class ProductController extends Controller
      */
     public function destroy(Product $product)
     {
-        //
+        if ($product->user_id == Auth::id()) {
+            $product->delete();
+            return response(['message' => 'product successfully deleted!']);
+        }
     }
 }

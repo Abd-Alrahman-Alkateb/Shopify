@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\Category;
 use App\Models\Product;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 
 class ProductController extends Controller
 {
@@ -69,6 +70,7 @@ class ProductController extends Controller
         ]);
 
         $validation['featured_image'] = $request->featured_image->store('public/images');
+        $validation['user_id'] = Auth::id();
         $product = Product::create($validation);
         return redirect()->route('products.index');
 
@@ -94,8 +96,10 @@ class ProductController extends Controller
      */
     public function edit(Product $product)
     {
+        if ($product->user_id == Auth::id()) {
         $categories = Category::all();
         return view('products.edit', ['product' => $product,'categories' => $categories]);
+        }
     }
 
     /**
@@ -107,6 +111,7 @@ class ProductController extends Controller
      */
     public function update(Request $request, Product $product)
     {
+        if ($product->user_id == Auth::id()) {
         $validation = $request->validate([
             'name'    => 'required',
             'price'   => 'required|numeric',
@@ -126,6 +131,7 @@ class ProductController extends Controller
         $product->save();
         return redirect()->route('products.index');
     }
+    }
 
     /**
      * Remove the specified resource from storage.
@@ -135,6 +141,9 @@ class ProductController extends Controller
      */
     public function destroy(Product $product)
     {
-        //
+        if ($product->user_id == Auth::id()) {
+            $product->delete();
+            return redirect()->route('products.index')->withStatus(__('product successfully deleted!'));
+        }
     }
 }
