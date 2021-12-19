@@ -9,7 +9,7 @@ use Spatie\Translatable\HasTranslations;
 class Product extends Model
 {
     use HasFactory;
-    protected $fillable =['name','price','quantity','exp_date','featured_image','category_id','description'];
+    protected $fillable =['name','price','quantity','exp_date','featured_image','category_id','description','current_price','user_id'];
 
     public function category()
     {
@@ -18,6 +18,10 @@ class Product extends Model
     public function user()
     {
         return $this->belongsTo(User::class,'user_id');
+    }
+    public function discounts()
+    {
+        return $this->hasMany(Discount::class,'product_id')->orderBy('date');
     }
 
 

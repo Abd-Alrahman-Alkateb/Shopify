@@ -86,6 +86,6 @@ Route::post('/logout', function (Request $request) {
 // Route::post('register', [AuthController::class, 'register']);
 // Route::resource('products', ProductController::class)/*->middleware('auth:sanctum')*/;
 Route::resource('categories', CategoryController::class)/*->middleware('auth:sanctum')*/;
-Route::apiResource('api-products', ApiProductController::class)/*->middleware('auth:sanctum')*/;
-Route::apiResource('api-categories', ApiCategoryController::class)/*->middleware('auth:sanctum')*/;
+Route::apiResource('api-products', ApiProductController::class)->middleware('auth:sanctum');
+Route::apiResource('api-categories', ApiCategoryController::class)->middleware('auth:sanctum');
 

@@ -64,12 +64,15 @@ class ProductController extends Controller
             'price'   => 'required|numeric',
             'quantity'   => 'required|numeric',
             'exp_date'    => 'required|date',
-            'featured_image'    => 'required|file|image',
+            'featured_image'    => 'required|array',
+            'featured_image.*'    => 'required|file|image',
             'description'   => 'required',
-            'category_id'    => 'required|numeric|exists:category,id',
+            'category_id'    => 'required|numeric|exists:categories,id',
         ]);
 
-        $validation['featured_image'] = $request->featured_image->store('public/images');
+        foreach ($validation['featured_image'] as $featured_image) {
+            $featured_image->store('public/images');
+        }
         $validation['user_id'] = Auth::id();
         $product = Product::create($validation);
         return redirect()->route('products.index');
@@ -116,17 +119,21 @@ class ProductController extends Controller
             'name'    => 'required',
             'price'   => 'required|numeric',
             'quantity'   => 'required|numeric',
-            'featured_image'    => 'required|file|image',
+            'featured_image'    => 'required|array',
+            'featured_image.*'    => 'required|file|image',
             'description'   => 'required',
-            'category_id'    => 'required|numeric|exists:category,id',
+            'category_id'    => 'required|numeric|exists:categories,id',
         ]);
 
         $product->name = $validation['name'];
         $product->price = $validation['price'];
         $product->quantity = $validation['quantity'];
-        $product->featured_image = $request->featured_image->store('public/images');
+        $product->featured_image = $validation['featured_image'];
         $product->description = $validation['description'];
         $product->category_id = $validation['category_id'];
+        foreach ($validation['featured_image'] as $featured_image) {
+            $featured_image->store('public/images');
+        }
 
         $product->save();
         return redirect()->route('products.index');
