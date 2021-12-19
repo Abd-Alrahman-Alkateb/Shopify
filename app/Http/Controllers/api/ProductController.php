@@ -57,7 +57,9 @@ class ProductController extends Controller
             'exp_date'    => 'required|date',
             'featured_image'    => 'required|file|image',
             'description'   => 'required',
-            'category_id'    => 'required|numeric|exists:category,id',
+            'category_id'    => 'required|numeric',
+            'current_price'=>'required'
+            //|exists:category,id
         ]);
 
         $validation['featured_image'] = $request->featured_image->store('public/images');
