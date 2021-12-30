@@ -21,8 +21,7 @@ class ProductController extends Controller
     public function index(Request $request)
     {
         $request->validate([
-            'categories'    => 'array',
-            'categories.*'  => 'numeric'
+            'category'    => 'numeric',
         ]);
 
         $products = Product::latest();
@@ -34,13 +33,13 @@ class ProductController extends Controller
             $products->orwhere('exp_date', 'like', "%$request->q%");
             $products->orwhere('description', 'like', "%$request->q%");
         }
-        if ($request->filled('categories')) {
-            $products->whereIn('category_id', $request->category);
+        if ($request->filled('category')) {
+            $products->where('category_id', 'like', "$request->category");
         }
 
         $products = $products->paginate(8);
         $categories = Category::all();
-        return ProductResource::collection(['products' => $products,'categories' => $categories]);
+        return ProductResource::collection($products);
     }
 
     /**
@@ -52,7 +51,7 @@ class ProductController extends Controller
     public function store(Request $request)
     {
         $validation = $request->validate([
-            'name'    => 'required',
+            'name'    => 'required|min:2|max:15',
             'price'   => 'required|numeric',
             'quantity'   => 'required|numeric',
             'exp_date'    => 'required|date',
@@ -91,7 +90,7 @@ class ProductController extends Controller
     {
         if ($product->user_id == Auth::id()) {
         $validation = $request->validate([
-            'name'    => 'required',
+            'name'    => 'required|min:2|max:15',
             'price'   => 'required|numeric',
             'quantity'   => 'required|numeric',
             'featured_image'    => 'required|array',
