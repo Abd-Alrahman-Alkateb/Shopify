@@ -57,6 +57,7 @@ class ProductController extends Controller
             'exp_date'    => 'required|date',
             'featured_image'    => 'required|file|image',
             'description'   => 'required',
+            'contact_info'   => 'required',
             'category_id'    => 'required|numeric|exists:categories,id',
             'date1'    =>   'required',
             'discount_percent1'    =>  'required',
@@ -125,6 +126,7 @@ class ProductController extends Controller
             'quantity'   => 'required|numeric',
             'featured_image'    => 'required|file|image',
             'description'   => 'required',
+            'contact_info'   => 'required',
             'category_id'    => 'required|numeric|exists:categories,id',
         ]);
 
@@ -133,6 +135,7 @@ class ProductController extends Controller
         $product->quantity = $validation['quantity'];
         $product->featured_image = $validation['featured_image'];
         $product->description = $validation['description'];
+        $product->contact_info = $validation['contact_info'];
         $product->category_id = $validation['category_id'];
         $product->featured_image = $request->featured_image->store('public/images');
 
@@ -166,6 +169,7 @@ class ProductController extends Controller
             $products->orwhere('quantity', 'like', "%$request->search%");
             $products->orwhere('exp_date', 'like', "%$request->search%");
             $products->orwhere('description', 'like', "%$request->search%");
+            $products->orwhere('contact_info', 'like', "%$request->search%");
 
             $products = $products->paginate(16);
             return ProductResource::collection($products);

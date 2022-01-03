@@ -9,7 +9,7 @@ use Spatie\Translatable\HasTranslations;
 class Product extends Model
 {
     use HasFactory;
-    protected $fillable =['name','price','quantity','exp_date','featured_image','category_id','description','user_id'];
+    protected $fillable =['name','price','quantity','exp_date','featured_image','category_id','description','user_id', 'contact_info'];
 
     public function category()
     {

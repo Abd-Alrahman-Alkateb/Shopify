@@ -31,11 +31,7 @@ Route::post('/register', function (Request $request) {
         'lname'    => 'required',
         'email'    => 'required|email',
         'password'    => 'required',
-        'profile_img_url'    => 'required|file|image',
-        'whatsapp_url'    => 'required|url',
-        'facebook_url'    => 'required|url',
     ]);
-    $validation['profile_img_url'] = $request->profile_img_url->store('public/images');
 
     $validation['password'] = bcrypt($validation['password']);
     $user = User::create($validation);

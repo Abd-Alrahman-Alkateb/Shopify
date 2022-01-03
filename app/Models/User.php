@@ -22,9 +22,6 @@ class User extends Authenticatable
         'lname',
         'email',
         'password',
-        'profile_img_url',
-        'whatsapp_url',
-        'facebook_url'
     ];
 
     /**
