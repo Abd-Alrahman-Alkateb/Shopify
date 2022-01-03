@@ -59,11 +59,30 @@ class ProductController extends Controller
             'description'   => 'required',
             'contact_info'   => 'required',
             'category_id'    => 'required|numeric|exists:categories,id',
+            'date1'    =>   'required',
+            'discount_percent1'    =>  'required',
+            'date2'   =>   'required',
+            'discount_percent2'    =>  'required',
+            'date3'    =>   'required',
+            'discount_percent3'    =>  'required',
         ]);
 
         $validation['featured_image'] = $request->featured_image->store('public/images');
         $validation['user_id'] = Auth::id();
         $product = Product::create($validation);
+        $product->discounts()->create([
+            'date' => $validation['date1'],
+            'discount_percentage' => $validation['discount_percent1']
+        ]);
+        $product->discounts()->create([
+            'date' => $validation['date2'],
+            'discount_percentage' => $validation['discount_percent2']
+        ]);
+        $product->discounts()->create([
+            'date' => $validation['date3'],
+            'discount_percentage' => $validation['discount_percent3']
+        ]);
+
         return response(['message' => 'product was created']);
     }
 
@@ -75,6 +94,19 @@ class ProductController extends Controller
      */
     public function show(Product $product)
     {
+        $discounts =$product->discounts()->orderBy('date')->get();
+        $max=null;
+        foreach($discounts as $discount){
+            if($discount['date']<=now()){
+                $max=$discount;
+            }
+        }
+        if(!is_null($max)){
+            $new_value = ($product->price*$max['discount_percentage'])/100;
+            $product['current_price'] = $product->price - $new_value;
+        }
+
+
         return new ProductResource(['product' => $product]);
     }
 
