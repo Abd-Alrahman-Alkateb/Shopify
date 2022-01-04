@@ -79,8 +79,8 @@ Route::post('/logout', function (Request $request) {
 })->middleware('auth:sanctum');
 
 
-Route::apiResource('api-products', ApiProductController::class)->middleware('auth:sanctum');
-Route::apiResource('api-categories', ApiCategoryController::class)->middleware('auth:sanctum');
-Route::post('search',[ApiProductController::class,'search'])->middleware('auth:sanctum');
 Route::Get('my-products',[ApiProductController::class,'myProducts'])->middleware('auth:sanctum');
+Route::post('search',[ApiProductController::class,'search'])->middleware('auth:sanctum');
+Route::apiResource('api-categories', ApiCategoryController::class)->middleware('auth:sanctum');
+Route::apiResource('api-products', ApiProductController::class)->middleware('auth:sanctum');
 
