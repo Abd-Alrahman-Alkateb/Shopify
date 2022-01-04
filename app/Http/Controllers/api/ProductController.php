@@ -38,7 +38,19 @@ class ProductController extends Controller
         }
 
         $products = $products->paginate(8);
-        $categories = Category::all();
+        foreach ($products as $product) {
+            $discounts =$product->discounts()->orderBy('date')->get();
+            $max=null;
+            foreach($discounts as $discount){
+                if($discount['date']<=now()){
+                    $max=$discount;
+                }
+            }
+            if(!is_null($max)){
+                $new_value = ($product->price*$max['discount_percentage'])/100;
+                $product['current_price'] = $product->price - $new_value;
+            }
+        }
         return ProductResource::collection($products);
     }
 
@@ -106,7 +118,6 @@ class ProductController extends Controller
             $product['current_price'] = $product->price - $new_value;
         }
 
-
         return new ProductResource(['product' => $product]);
     }
 
@@ -172,6 +183,20 @@ class ProductController extends Controller
             $products->orwhere('contact_info', 'like', "%$request->search%");
 
             $products = $products->paginate(16);
+            foreach ($products as $product) {
+                $discounts =$product->discounts()->orderBy('date')->get();
+                $max=null;
+                foreach($discounts as $discount){
+                    if($discount['date']<=now()){
+                        $max=$discount;
+                    }
+                }
+                if(!is_null($max)){
+                    $new_value = ($product->price*$max['discount_percentage'])/100;
+                    $product['current_price'] = $product->price - $new_value;
+                }
+            }
+
             return ProductResource::collection($products);
         }
     }
@@ -181,6 +206,20 @@ class ProductController extends Controller
         $products = Product::latest();
         $products->where('user_id', 'like', Auth::id());
         $products = $products->paginate(8);
+
+        foreach ($products as $product) {
+            $discounts =$product->discounts()->orderBy('date')->get();
+            $max=null;
+            foreach($discounts as $discount){
+                if($discount['date']<=now()){
+                    $max=$discount;
+                }
+            }
+            if(!is_null($max)){
+                $new_value = ($product->price*$max['discount_percentage'])/100;
+                $product['current_price'] = $product->price - $new_value;
+            }
+        }
 
         return ProductResource::collection($products);
     }
