@@ -46,6 +46,9 @@ class ProductController extends Controller
                     $max=$discount;
                 }
             }
+            if($max==null){
+                $product['current_price']=$product->price;
+            }
             if(!is_null($max)){
                 $new_value = ($product->price*$max['discount_percentage'])/100;
                 $product['current_price'] = $product->price - $new_value;
@@ -112,6 +115,9 @@ class ProductController extends Controller
             if($discount['date']<=now()){
                 $max=$discount;
             }
+        }
+        if($max==null){
+            $product['current_price']=$product->price;
         }
         if(!is_null($max)){
             $new_value = ($product->price*$max['discount_percentage'])/100;
@@ -191,6 +197,9 @@ class ProductController extends Controller
                         $max=$discount;
                     }
                 }
+                if($max==null){
+                    $product['current_price']=$product->price;
+                }
                 if(!is_null($max)){
                     $new_value = ($product->price*$max['discount_percentage'])/100;
                     $product['current_price'] = $product->price - $new_value;
@@ -214,6 +223,9 @@ class ProductController extends Controller
                 if($discount['date']<=now()){
                     $max=$discount;
                 }
+            }
+            if($max==null){
+                $product['current_price']=$product->price;
             }
             if(!is_null($max)){
                 $new_value = ($product->price*$max['discount_percentage'])/100;
