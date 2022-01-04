@@ -82,7 +82,13 @@ class ProductController extends Controller
             'discount_percent3'    =>  'required',
         ]);
 
-        $validation['featured_image'] = $request->featured_image->store('public/images');
+        // $validation['featured_image'] = $request->featured_image->store('public/images');
+        $validation['featured_image'] = $request->featured_image->store('/images');
+        $file= $request->file('featured_image');
+        $extension = $file->getClientOriginalExtension();
+        $filename = time() . '.' . $extension;
+        $validation['featured_image'] = $file->move('public/images', $filename);
+
         $validation['user_id'] = Auth::id();
         $product = Product::create($validation);
         $product->discounts()->create([
