@@ -79,8 +79,14 @@ Route::post('/logout', function (Request $request) {
 })->middleware('auth:sanctum');
 
 
-Route::apiResource('api-products', ApiProductController::class)->middleware('auth:sanctum');
 Route::apiResource('api-categories', ApiCategoryController::class)->middleware('auth:sanctum');
+
+Route::get('my-products',[ApiProductController::class,'myProducts'])->middleware('auth:sanctum');
 Route::post('search',[ApiProductController::class,'search'])->middleware('auth:sanctum');
-Route::Get('my-products',[ApiProductController::class,'myProducts'])->middleware('auth:sanctum');
+Route::get('api-products',[ApiProductController::class,'index'])->middleware('auth:sanctum');
+Route::post('api-products/',[ApiProductController::class,'store'])->middleware('auth:sanctum');
+Route::get('api-products/{id}',[ApiProductController::class,'show'])->middleware('auth:sanctum');
+Route::post('api-products/{id}',[ApiProductController::class,'update'])->middleware('auth:sanctum');
+Route::delete('api-products/{id}',[ApiProductController::class,'destroy'])->middleware('auth:sanctum');
+
 
