@@ -109,8 +109,9 @@ class ProductController extends Controller
      * @param  \App\Models\Product  $product
      * @return \Illuminate\Http\Response
      */
-    public function show(Product $product)
+    public function show($product_id)
     {
+        $product = Product::findOrFail($product_id);
         $discounts =$product->discounts()->orderBy('date')->get();
         $max=null;
         foreach($discounts as $discount){
@@ -136,8 +137,9 @@ class ProductController extends Controller
      * @param  \App\Models\Product  $product
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, Product $product)
+    public function update(Request $request, $product_id)
     {
+        $product = Product::findOrFail($product_id);
         if ($product->user_id == Auth::id()) {
         $validation = $request->validate([
             'name'    => 'required|min:2|max:15',
@@ -177,9 +179,12 @@ class ProductController extends Controller
      * @param  \App\Models\Product  $product
      * @return \Illuminate\Http\Response
      */
-    public function destroy(Product $product)
+    public function destroy($product_id)
     {
+        $product = Product::findOrFail($product_id);
         if ($product->user_id == Auth::id()) {
+        $product->discounts()->orderBy('date')->delete();
+
             $product->delete();
             return response(['message' => 'product successfully deleted!']);
         }
