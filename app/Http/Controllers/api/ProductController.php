@@ -166,6 +166,22 @@ class ProductController extends Controller
         $validation['featured_image'] =$request->featured_image->store('public/images');
         $product->featured_image = str_replace('public','/storage',$validation['featured_image']);
 
+        $product->discounts()->orderBy('date')->delete();
+
+        $product->discounts()->create([
+            'date' => $validation['date1'],
+            'discount_percentage' => $validation['discount_percent1']
+        ]);
+        $product->discounts()->create([
+            'date' => $validation['date2'],
+            'discount_percentage' => $validation['discount_percent2']
+        ]);
+        $product->discounts()->create([
+            'date' => $validation['date3'],
+            'discount_percentage' => $validation['discount_percent3']
+        ]);
+
+
 
 
         $product->save();
