@@ -131,11 +131,11 @@ class ProductController extends Controller
             'description'   => 'required',
             'contact_info'   => 'required',
             'category_id'    => 'required|numeric|exists:categories,id',
-            'date1'    =>   'require|date',
+            'date1'    =>   'required|date',
             'discount_percent1'    =>  'required|numeric',
-            'date2'   =>   'require|date',
+            'date2'    =>   'required|date',
             'discount_percent2'    =>  'required|numeric',
-            'date3'    =>   'require|date',
+            'date3'    =>   'required|date',
             'discount_percent3'    =>  'required|numeric',
         ]);
 
@@ -207,11 +207,11 @@ class ProductController extends Controller
             'description'   => 'required',
             'contact_info'   => 'required',
             'category_id'    => 'required|numeric|exists:categories,id',
-            'date1'    =>   'require|date',
+            'date1'    =>   'required|date',
             'discount_percent1'    =>  'required|numeric',
-            'date2'   =>   'require|date',
+            'date2'   =>   'required|date',
             'discount_percent2'    =>  'required|numeric',
-            'date3'    =>   'require|date',
+            'date3'    =>   'required|date',
             'discount_percent3'    =>  'required|numeric',
         ]);
 
