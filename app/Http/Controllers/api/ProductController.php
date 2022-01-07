@@ -37,6 +37,62 @@ class ProductController extends Controller
             $products->where('category_id', 'like', "$request->category");
         }
 
+        if ($request->filled('sort')) {
+            if ($request->filled('order')) {
+                if ($request->order == 'ascending') {
+                    if ($request->sort == 'name') {
+                        $products = Product::orderBy('name', 'asc');
+                    }
+                    if ($request->sort == 'price') {
+                        $products = Product::orderBy('price', 'asc');
+                    }
+                    if ($request->sort == 'views') {
+                        $products = Product::orderBy('views', 'asc');
+                    }
+                    if ($request->sort == 'exp_date') {
+                        $products = Product::orderBy('exp_date', 'asc');
+                    }
+                    if ($request->sort == 'creation_date') {
+                        $products = Product::orderBy('created_at', 'asc');
+                    }
+                }
+                if ($request->order == 'descending') {
+                    if ($request->sort == 'name') {
+                        $products = Product::orderBy('name', 'desc');
+                    }
+                    if ($request->sort == 'price') {
+                        $products = Product::orderBy('price', 'desc');
+                    }
+                    if ($request->sort == 'views') {
+                        $products = Product::orderBy('views', 'desc');
+                    }
+                    if ($request->sort == 'exp_date') {
+                        $products = Product::orderBy('exp_date', 'desc');
+                    }
+                    if ($request->sort == 'creation_date') {
+                        $products = Product::orderBy('created_at', 'desc');
+                    }
+                }
+            }
+            else {
+                if ($request->sort == 'name') {
+                    $products = Product::orderBy('name', 'asc');
+                }
+                if ($request->sort == 'price') {
+                    $products = Product::orderBy('price', 'asc');
+                }
+                if ($request->sort == 'views') {
+                    $products = Product::orderBy('views', 'asc');
+                }
+                if ($request->sort == 'exp_date') {
+                    $products = Product::orderBy('exp_date', 'asc');
+                }
+                if ($request->sort == 'creation_date') {
+                    $products = Product::orderBy('created_at', 'asc');
+                }
+            }
+        }
+
         $products = $products->paginate(8);
         foreach ($products as $product) {
             $discounts =$product->discounts()->orderBy('date')->get();
@@ -54,6 +110,7 @@ class ProductController extends Controller
                 $product['current_price'] = $product->price - $new_value;
             }
         }
+
         return ProductResource::collection($products);
     }
 
