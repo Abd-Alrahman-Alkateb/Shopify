@@ -43,8 +43,8 @@ class ProductController extends Controller
                     if ($request->sort == 'name') {
                         $products = Product::orderBy('name', 'asc');
                     }
-                    if ($request->sort == 'price') {
-                        $products = Product::orderBy('price', 'asc');
+                    if ($request->sort == 'current_price') {
+                        $products = Product::orderBy('current_price', 'asc');
                     }
                     if ($request->sort == 'views') {
                         $products = Product::orderBy('views', 'asc');
@@ -60,8 +60,8 @@ class ProductController extends Controller
                     if ($request->sort == 'name') {
                         $products = Product::orderBy('name', 'desc');
                     }
-                    if ($request->sort == 'price') {
-                        $products = Product::orderBy('price', 'desc');
+                    if ($request->sort == 'current_price') {
+                        $products = Product::orderBy('current_price', 'desc');
                     }
                     if ($request->sort == 'views') {
                         $products = Product::orderBy('views', 'desc');
@@ -78,8 +78,8 @@ class ProductController extends Controller
                 if ($request->sort == 'name') {
                     $products = Product::orderBy('name', 'asc');
                 }
-                if ($request->sort == 'price') {
-                    $products = Product::orderBy('price', 'asc');
+                if ($request->sort == 'current_price') {
+                    $products = Product::orderBy('current_price', 'asc');
                 }
                 if ($request->sort == 'views') {
                     $products = Product::orderBy('views', 'asc');
