@@ -87,7 +87,7 @@ class ProductController extends Controller
         $file= $request->file('featured_image');
         $extension = $file->getClientOriginalExtension();
         $filename = time() . '.' . $extension;
-        $validation['featured_image'] = $file->move('public/images', $filename);
+        $validation['featured_image'] = $file->move('/images', $filename);
 
         $validation['user_id'] = Auth::id();
         $product = Product::create($validation);
@@ -131,6 +131,7 @@ class ProductController extends Controller
             $product['current_price'] = $product->price - $new_value;
         }
 
+        $product->increment('views');
         return new ProductResource(['product' => $product]);
     }
 
