@@ -37,6 +37,62 @@ class ProductController extends Controller
             $products->where('category_id', 'like', "$request->category");
         }
 
+        if ($request->filled('sort')) {
+            if ($request->filled('order')) {
+                if ($request->order == 'ascending') {
+                    if ($request->sort == 'name') {
+                        $products = Product::orderBy('name', 'asc');
+                    }
+                    if ($request->sort == 'current_price') {
+                        $products = Product::orderBy('current_price', 'asc');
+                    }
+                    if ($request->sort == 'views') {
+                        $products = Product::orderBy('views', 'asc');
+                    }
+                    if ($request->sort == 'exp_date') {
+                        $products = Product::orderBy('exp_date', 'asc');
+                    }
+                    if ($request->sort == 'creation_date') {
+                        $products = Product::orderBy('created_at', 'asc');
+                    }
+                }
+                if ($request->order == 'descending') {
+                    if ($request->sort == 'name') {
+                        $products = Product::orderBy('name', 'desc');
+                    }
+                    if ($request->sort == 'current_price') {
+                        $products = Product::orderBy('current_price', 'desc');
+                    }
+                    if ($request->sort == 'views') {
+                        $products = Product::orderBy('views', 'desc');
+                    }
+                    if ($request->sort == 'exp_date') {
+                        $products = Product::orderBy('exp_date', 'desc');
+                    }
+                    if ($request->sort == 'creation_date') {
+                        $products = Product::orderBy('created_at', 'desc');
+                    }
+                }
+            }
+            else {
+                if ($request->sort == 'name') {
+                    $products = Product::orderBy('name', 'asc');
+                }
+                if ($request->sort == 'current_price') {
+                    $products = Product::orderBy('current_price', 'asc');
+                }
+                if ($request->sort == 'views') {
+                    $products = Product::orderBy('views', 'asc');
+                }
+                if ($request->sort == 'exp_date') {
+                    $products = Product::orderBy('exp_date', 'asc');
+                }
+                if ($request->sort == 'creation_date') {
+                    $products = Product::orderBy('created_at', 'asc');
+                }
+            }
+        }
+
         $products = $products->paginate(8);
         foreach ($products as $product) {
             $discounts =$product->discounts()->orderBy('date')->get();
@@ -54,6 +110,7 @@ class ProductController extends Controller
                 $product['current_price'] = $product->price - $new_value;
             }
         }
+
         return ProductResource::collection($products);
     }
 
@@ -74,12 +131,12 @@ class ProductController extends Controller
             'description'   => 'required',
             'contact_info'   => 'required',
             'category_id'    => 'required|numeric|exists:categories,id',
-            'date1'    =>   'required',
-            'discount_percent1'    =>  'required',
-            'date2'   =>   'required',
-            'discount_percent2'    =>  'required',
-            'date3'    =>   'required',
-            'discount_percent3'    =>  'required',
+            'date1'    =>   'required|date',
+            'discount_percent1'    =>  'required|numeric',
+            'date2'    =>   'required|date',
+            'discount_percent2'    =>  'required|numeric',
+            'date3'    =>   'required|date',
+            'discount_percent3'    =>  'required|numeric',
         ]);
 
         $validation['featured_image'] =$request->featured_image->store('public/images');
@@ -127,6 +184,7 @@ class ProductController extends Controller
             $product['current_price'] = $product->price - $new_value;
         }
 
+        $product->increment('views');
         return new ProductResource(['product' => $product]);
     }
 
@@ -149,12 +207,12 @@ class ProductController extends Controller
             'description'   => 'required',
             'contact_info'   => 'required',
             'category_id'    => 'required|numeric|exists:categories,id',
-            'date1'    =>   'required',
-            'discount_percent1'    =>  'required',
-            'date2'   =>   'required',
-            'discount_percent2'    =>  'required',
-            'date3'    =>   'required',
-            'discount_percent3'    =>  'required',
+            'date1'    =>   'required|date',
+            'discount_percent1'    =>  'required|numeric',
+            'date2'   =>   'required|date',
+            'discount_percent2'    =>  'required|numeric',
+            'date3'    =>   'required|date',
+            'discount_percent3'    =>  'required|numeric',
         ]);
 
         $product->name = $validation['name'];

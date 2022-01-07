@@ -25,6 +25,7 @@ class CreateProductsTable extends Migration
             $table->foreignId('user_id')->constrained('users');
             $table->text('description');
             $table->text('contact_info');
+            $table->integer('views')->default(0);
             $table->timestamps();
         });
     }
