@@ -82,12 +82,17 @@ class ProductController extends Controller
             'discount_percent3'    =>  'required',
         ]);
 
+<<<<<<< HEAD
         // $validation['featured_image'] = $request->featured_image->store('public/images');
         $validation['featured_image'] = $request->featured_image->store('/images');
         $file= $request->file('featured_image');
         $extension = $file->getClientOriginalExtension();
         $filename = time() . '.' . $extension;
         $validation['featured_image'] = $file->move('/images', $filename);
+=======
+        $validation['featured_image'] =$request->featured_image->store('public/images');
+        $validation['featured_image']=str_replace('public','/storage',$validation['featured_image']);
+>>>>>>> 2a375ccb260f039e6c4858d30538f653d4cfa80a
 
         $validation['user_id'] = Auth::id();
         $product = Product::create($validation);
@@ -154,16 +159,39 @@ class ProductController extends Controller
             'description'   => 'required',
             'contact_info'   => 'required',
             'category_id'    => 'required|numeric|exists:categories,id',
+            'date1'    =>   'required',
+            'discount_percent1'    =>  'required',
+            'date2'   =>   'required',
+            'discount_percent2'    =>  'required',
+            'date3'    =>   'required',
+            'discount_percent3'    =>  'required',
         ]);
 
         $product->name = $validation['name'];
         $product->price = $validation['price'];
         $product->quantity = $validation['quantity'];
-        $product->featured_image = $validation['featured_image'];
         $product->description = $validation['description'];
         $product->contact_info = $validation['contact_info'];
         $product->category_id = $validation['category_id'];
-        $product->featured_image = $request->featured_image->store('public/images');
+        $validation['featured_image'] =$request->featured_image->store('public/images');
+        $product->featured_image = str_replace('public','/storage',$validation['featured_image']);
+
+        $product->discounts()->orderBy('date')->delete();
+
+        $product->discounts()->create([
+            'date' => $validation['date1'],
+            'discount_percentage' => $validation['discount_percent1']
+        ]);
+        $product->discounts()->create([
+            'date' => $validation['date2'],
+            'discount_percentage' => $validation['discount_percent2']
+        ]);
+        $product->discounts()->create([
+            'date' => $validation['date3'],
+            'discount_percentage' => $validation['discount_percent3']
+        ]);
+
+
 
 
         $product->save();
