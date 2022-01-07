@@ -17,7 +17,7 @@ class CategoryController extends Controller
     public function index()
     {
         $categories = Category::all();
-        return CategoryResource::collection(['categories' => $categories]);
+        return CategoryResource::collection($categories);
     }
 
     /**
@@ -32,7 +32,7 @@ class CategoryController extends Controller
             'name'    => 'required|min:2',
         ]);
 
-        $category = Category::create($validation);
+        Category::create($validation);
         return response(['message' => 'category was created']);
     }
 
